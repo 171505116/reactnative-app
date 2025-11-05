@@ -47,7 +47,6 @@
     "react-intl": "6.6.8",
     "react-native": "0.72.7",
     "react-native-biometrics": "^3.0.1",
-    "react-native-ble-manager": "^12.1.5",
     "react-native-calendar-events": "2.2.0",
     "react-native-calendars": "1.1305.0",
     "react-native-collapsible": "1.6.1",
