@@ -1,0 +1,26 @@
+name: React Native Android Build
+
+on:
+  workflow_dispatch:  # 允许手动触发
+#  push:
+#    branches:
+#     - matser  # 当 matser 分支有 push 事件时触发
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm install
+        # 添加这一步：为 gradlew 赋予可执行权限
+      - name: Fix gradlew permissions
+        run: cd android && chmod +x ./gradlew
+      - name: Build Android
+        run:  cd android && ./gradlew assembleRelease
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: android/app/build/outputs/apk/release/app-release.apk

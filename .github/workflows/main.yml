@@ -1,29 +1,45 @@
-name: React Native Android Build
+name: 编译 React Native iOS 应用
 
 on:
   workflow_dispatch:  # 允许手动触发
-#  push:
-#    branches:
-#     - matser  # 当 matser 分支有 push 事件时触发
-
+  #push:
+  #  branches: [ main ]  # 监听 main 分支推送
+  #pull_request:
+  #  branches: [ main ]  # 监听 PR 到 main 分支
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-ios:
+    runs-on: macos-latest  # 必须使用 macOS 环境
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Dependencies
-        run: npm install
-        # 添加这一步：为 gradlew 赋予可执行权限
-      - name: Fix gradlew permissions
-        run: cd android && chmod +x ./gradlew
-      - name: Build Android
-        run:  cd android && ./gradlew assembleRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
         with:
-          name: app-release
-          path: android/app/build/outputs/apk/release/app-release.apk
+          node-version: 20.x  # 匹配项目的 Node 版本
+          cache: 'yarn'       # 或 'npm'，根据项目包管理器选择
 
+      - name: 安装前端依赖
+        run: |
+          yarn install --frozen-lockfile  # 或 npm install
+          # 安装 pods 前先导航到 ios 目录
+          cd ios
 
+      - name: 安装 CocoaPods 依赖
+        run: |
+          cd ios
+          pod install  # 安装 iOS 原生依赖
+
+      - name: 编译 Debug 版本（模拟器）
+        run: |
+          cd ios
+          # 使用 xcodebuild 编译模拟器版本（无需证书）
+          xcodebuild -workspace AwesomeProject.xcworkspace \
+            -scheme AwesomeProject \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            build
     
