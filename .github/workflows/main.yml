@@ -16,8 +16,7 @@ jobs:
         run: npm install
         # 添加这一步：为 gradlew 赋予可执行权限
       - name: Fix gradlew permissions
-        run: cd android
-        run: chmod +x ./gradlew
+        run: cd android && chmod +x ./gradlew
       - name: Build Android
         run:  ./gradlew assembleRelease
       - name: Upload Artifact
