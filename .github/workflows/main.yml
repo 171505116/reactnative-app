@@ -14,6 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Dependencies
         run: npm install
+        # 添加这一步：为 gradlew 赋予可执行权限
+      - name: Fix gradlew permissions
+        run: chmod +x ./gradlew
       - name: Build Android
         run: cd android && ./gradlew assembleRelease
       - name: Upload Artifact
