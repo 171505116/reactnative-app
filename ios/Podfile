@@ -48,6 +48,9 @@ target 'AwesomeProject' do
   target 'AwesomeProjectTests' do
     inherit! :complete
     # Pods for testing
+    # 手动指定 Boost 版本
+    # 覆盖默认的 Boost 引用
+    pod 'Boost', :podspec => '../node_modules/react-native/third-party-podspecs/Boost.podspec', :version => '1.76.0'
   end
 
   post_install do |installer|
