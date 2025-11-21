@@ -33,11 +33,14 @@ jobs:
           rm -rf Podfile.lock Pods  # 清除本地依赖
           pod install --verbose  # 详细日志模式，便于排查
 
-      #- name: 安装 CocoaPods 依赖
+      #- name: 安装 CocoaPods 依赖 # 清除所有缓存
       #  run: |
       #    cd ios
       #    pod install  # 安装 iOS 原生依赖
-
+     # 清除本地依赖
+     # pod cache clean --all  
+     #     rm -rf Podfile.lock Pods 
+    # 详细日志模式，便于排查
       - name: 编译 Debug 版本（模拟器）
         run: |
           cd ios
