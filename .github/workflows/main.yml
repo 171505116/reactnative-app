@@ -23,7 +23,8 @@ jobs:
 
       - name: 安装前端依赖
         run: |
-          yarn install --frozen-lockfile  # 或 npm install
+          yarn install --update-checksums
+          # 或 npm install  yarn install --frozen-lockfile
           # 安装 pods 前先导航到 ios 目录
           cd ios
       - name: 清除 CocoaPods 缓存并安装依赖
