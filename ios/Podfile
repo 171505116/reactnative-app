@@ -74,8 +74,7 @@ target 'AwesomeProject' do
   
   end
 
-  # 保留Flipper配置（无需删除，静态链接模式下可兼容）
-  use_flipper!()
+
  
 
   post_install do |installer|
@@ -85,7 +84,7 @@ target 'AwesomeProject' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
-    flipper_post_install(installer)
+   
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
