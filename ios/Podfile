@@ -57,8 +57,15 @@ target 'AwesomeProject' do
     # 覆盖默认的 Boost 引用
     # pod 'Boost', :podspec => '../node_modules/react-native/third-party-podspecs/Boost.podspec', :version => '1.76.0'
     # 写法1：直接为FirebaseSessions配置（简洁高效，自动覆盖所有子依赖）
-    pod 'FirebaseSessions', :modular_headers => true
-
+    # pod 'FirebaseSessions', :modular_headers => true
+    # 写法2：为所有缺失模块逐个配置（精准控制，适合特殊场景）
+    pod 'FirebaseCore', :modular_headers => true
+    pod 'FirebaseCoreExtension', :modular_headers => true
+    pod 'FirebaseInstallations', :modular_headers => true
+    pod 'GoogleDataTransport', :modular_headers => true
+    pod 'GoogleUtilities', :modular_headers => true
+    pod 'nanopb', :modular_headers => true
+    pod 'FirebaseSessions' # 最后引入FirebaseSessions
   end
 
   post_install do |installer|
