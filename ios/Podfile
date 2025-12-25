@@ -9,7 +9,7 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, min_ios_version_supported
-use_frameworks!
+
 use_modular_headers!
 prepare_react_native_project!
 
@@ -27,7 +27,8 @@ flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : Flip
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
   Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
+  # use_frameworks! :linkage => linkage.to_sym
+  use_frameworks! :linkage => :static
 end
 
 target 'AwesomeProject' do
@@ -52,6 +53,8 @@ target 'AwesomeProject' do
 
   target 'AwesomeProjectTests' do
     inherit! :complete
+    # 核心配置：强制所有Pods使用静态框架（兼容Flipper静态库）
+    use_frameworks! :linkage => :static
     # Pods for testing
     # 手动指定 Boost 版本
     # 覆盖默认的 Boost 引用
@@ -66,7 +69,16 @@ target 'AwesomeProject' do
     pod 'GoogleUtilities', :modular_headers => true
     pod 'nanopb', :modular_headers => true
     pod 'FirebaseSessions' # 最后引入FirebaseSessions
+
+    
+   # 保留Flipper配置（无需删除，静态链接模式下可兼容）
+    use_flipper!()
+    post_install do |installer|
+      flipper_post_install(installer)
+    end
   end
+
+
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
