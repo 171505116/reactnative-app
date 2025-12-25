@@ -56,6 +56,9 @@ target 'AwesomeProject' do
     # 手动指定 Boost 版本
     # 覆盖默认的 Boost 引用
     # pod 'Boost', :podspec => '../node_modules/react-native/third-party-podspecs/Boost.podspec', :version => '1.76.0'
+    # 写法1：直接为FirebaseSessions配置（简洁高效，自动覆盖所有子依赖）
+    pod 'FirebaseSessions', :modular_headers => true
+
   end
 
   post_install do |installer|
