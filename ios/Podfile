@@ -78,6 +78,21 @@ target 'AwesomeProject' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+
+      # 遍历所有Pods Target，统一设置IPHONEOS_DEPLOYMENT_TARGET
+    installer.pods_project.targets.each do |target|
+      # 覆盖所有Pods的部署目标版本（与platform :ios指定的版本一致即可）
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0' # 此处需与上方platform版本一致，最低12.0
+      end
+
+      # 可选：单独针对RNCPushNotificationIOS-library设置（精准控制，可省略，上述批量配置已覆盖）
+      # if target.name == 'RNCPushNotificationIOS-library'
+      #   target.build_configurations.each do |config|
+      #     config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      #   end
+      # end
+    end
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
 end
