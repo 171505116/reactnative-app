@@ -41,12 +41,7 @@ jobs:
       - name: Build React Native JS Bundle
         run: |
           mkdir -p android/app/src/main/assets  
-          npx react-native bundle \
-              --platform android \
-              --dev false \
-              --entry-file index.js \ 
-              --bundle-output android/app/src/main/assets/index.android.bundle \
-              --assets-dest android/app/src/main/res/
+          yarn build
           
        # 步骤5：构建 Android Release APK
       - name: android 原生打包
