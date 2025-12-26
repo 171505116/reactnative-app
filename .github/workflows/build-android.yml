@@ -44,8 +44,11 @@ jobs:
           yarn build
           
        # 步骤5：构建 Android Release APK
+       # 核心修复：给 gradlew 赋予可执行权限（必加）
       - name: android 原生打包
         run: |
+         
+          chmod +x android/gradlew
           cd android
           ./gradlew clean
           ./gradlew assembleRelease
