@@ -34,9 +34,19 @@ jobs:
         run: |
           yarn install 
           # 或 npm install  yarn install --frozen-lockfile
-      - name: 打bundle 包
+      # 步骤4.5：生成 React Native JS Bundle（核心补充）
+       # 创建 assets 目录（Android 要求 JS Bundle 放在 android/app/src/main/assets）
+      # 生成 JS Bundle 和 资源索引（--platform 指定安卓，--dev false 生产环境）
+      # 项目入口文件（若用 TS 则为 index.tsx）
+      - name: Build React Native JS Bundle
         run: |
-          yarn build
+          mkdir -p android/app/src/main/assets  
+          npx react-native bundle \
+              --platform android \
+              --dev false \
+              --entry-file index.js \ 
+              --bundle-output android/app/src/main/assets/index.android.bundle \
+              --assets-dest android/app/src/main/res/
           
        # 步骤5：构建 Android Release APK
       - name: android 原生打包
