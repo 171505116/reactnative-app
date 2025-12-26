@@ -1,0 +1,55 @@
+name: 编译 React Native android 应用
+
+on:
+  workflow_dispatch:  # 允许手动触发
+  #push:
+  #  branches: [ main ]  # 监听 main 分支推送
+  #pull_request:
+  #  branches: [ main ]  # 监听 PR 到 main 分支
+
+jobs:
+  build-ios:
+    runs-on: macos-latest  # 必须使用 macOS 环境
+
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+      # 步骤2：配置 Node.js 环境（React Native 依赖）
+      - name: 配置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x  # 匹配项目的 Node 版本
+          cache: 'yarn'       # 或 'npm'，根据项目包管理器选择
+
+      # 步骤3：配置 Java 环境（Android 构建需要 JDK 17）
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle # 缓存 Gradle 依赖，加速构建
+
+
+      - name: 安装前端依赖
+        run: |
+          yarn install 
+          # 或 npm install  yarn install --frozen-lockfile
+      - name: 打bundle 包
+        run: |
+          yarn build
+          
+       # 步骤5：构建 Android Release APK
+      - name: android 原生打包
+        run: |
+          cd android
+          ./gradlew clean
+          ./gradlew assembleRelease
+
+    
+      # 步骤7：上传 APK 作为构建产物（核心：提供下载链接）
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk # 产物名称
+          path: android/app/build/outputs/apk/release/app-release.apk # APK 路径
+          retention-days: 30 # 产物保留 30 天（可选）
