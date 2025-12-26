@@ -8,7 +8,7 @@ on:
   #  branches: [ main ]  # 监听 PR 到 main 分支
 
 jobs:
-  build-ios:
+  build-android:
     runs-on: macos-latest  # 必须使用 macOS 环境
 
     steps:
