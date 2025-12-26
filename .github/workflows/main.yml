@@ -32,7 +32,8 @@ jobs:
           cd ios
           # pod cache clean --all  # 清除所有缓存
           # rm -rf Podfile.lock Pods  # 清除本地依赖
-          pod install --verbose  # 详细日志模式，便于排查
+          pod install
+        # pod install --verbose  # 详细日志模式，便于排查
 
       #- name: 安装 CocoaPods 依赖 # 清除所有缓存
       #  run: |
@@ -46,11 +47,11 @@ jobs:
         run: |
           cd ios
           # 使用 xcodebuild 编译模拟器版本（无需证书）
-          xcodebuild -workspace AwesomeProject.xcworkspace \
+          xcodebuild build -workspace AwesomeProject.xcworkspace \
             -scheme AwesomeProject \
             -configuration Debug \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM=""  \
-            build
+            --quiet
     
