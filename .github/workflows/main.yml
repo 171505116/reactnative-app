@@ -26,13 +26,13 @@ jobs:
           yarn install --update-checksums
           # 或 npm install  yarn install --frozen-lockfile
           # 安装 pods 前先导航到 ios 目录
-          cd ios
-      - name: 清除 CocoaPods 缓存并安装依赖
+          # cd ios
+      - name: 清除 CocoaPods 缓存并安装依赖  and save logs
         run: |
           cd ios
           # pod cache clean --all  # 清除所有缓存
           # rm -rf Podfile.lock Pods  # 清除本地依赖
-          pod install
+          pod install --verbose > pod_install_full.log 2>&1
         # pod install --verbose  # 详细日志模式，便于排查
 
       #- name: 安装 CocoaPods 依赖 # 清除所有缓存
@@ -53,5 +53,13 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             DEVELOPMENT_TEAM=""  \
-            --quiet
-    
+            -quiet \
+            -verbose > xcode_build_full.log 2>&1
+      - name: Upload log artifacts 上传日志
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-logs # Artifact名称
+          path: | # 要上传的日志文件路径
+            ios/pod_install_full.log
+            ios/xcode_build_full.log
+          retention-days: 7 # 日志保留7天，可按需调整
